@@ -1,0 +1,46 @@
+{ pkgs, lib, config, inputs, ... }:
+
+{
+  packages = with pkgs; [ 
+    clang-tools # for clang-tidy that actually works, IMPORTANT: This needs to be placed before clang_18 as both provide a clang-tidy, but the clang_18 one doesn't work!
+    clang_18 # C/C++ Compiler
+    llvm_18 # Profiling and code coverage
+    ccache # Compiler cache to speed up compiles
+    git # Source code versioning
+    zellij # A better tmux (terminal multiplexer)
+    atuin # Command history, to use it with fish, follow this: https://docs.atuin.sh/guide/installation/#installing-the-shell-plugin
+    helix # A modal editor, similar to vim but different
+    fish # A better shell than bash
+    cmake # C++ build tool
+    ninja # Build system for speed; faster than make
+    cppcheck # C++ linter
+    include-what-you-use # C++ linter
+    toybox # Unix command line utilities like which, clear
+    doxygen # Source code documentation
+    # python configured below
+  ];
+
+  languages.python = {
+    enable = true;
+    version = "3.12.4";
+    venv.enable = true;
+    venv.requirements = ''
+      pyyaml
+      cmake_format==0.6.11
+      Jinja2
+      Pygments
+      python-lsp-server
+    '';
+  };
+
+  enterShell = ''
+    export TERM=xterm-color
+    export CC=clang
+    export CXX=clang++
+  '';
+
+  # https://devenv.sh/pre-commit-hooks/
+  # pre-commit.hooks.shellcheck.enable = true;
+
+  # See full reference at https://devenv.sh/reference/options/
+}

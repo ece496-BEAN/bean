@@ -1,0 +1,15 @@
+build*
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+
+.vscode
+cpm_modules
+.DS_Store
+.cache
