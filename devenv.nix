@@ -33,6 +33,10 @@
     '';
   };
 
+  pre-commit.hooks = {
+    commitizen.enable = true;
+  };
+  
   enterShell = ''
     export TERM=xterm-color
     export CC=clang
