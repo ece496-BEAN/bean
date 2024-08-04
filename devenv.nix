@@ -52,6 +52,13 @@
     entry = "./scripts/ci/doc.sh";
     pass_filenames = false;
   };
+  pre-commit.hooks.tests-passing = {
+    enable = true;
+
+    name = "Ensures that all our unit tests are passing.";
+    entry = "./scripts/ci/test.sh";
+    pass_filenames = false;
+  };
   
   enterShell = ''
     export TERM=xterm-color
