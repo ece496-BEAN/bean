@@ -63,5 +63,3 @@ doctest_discover_tests(${PROJECT_NAME})
 # ---- code coverage ----
 target_code_coverage(BeanBackend)
 target_code_coverage(${PROJECT_NAME} EXCLUDE .*_dep.* .*test/source.*)
-# if(ENABLE_TEST_COVERAGE) target_compile_options(BeanBackend PUBLIC -O0 -g -fprofile-arcs
-# -ftest-coverage) target_link_options(BeanBackend PUBLIC -fprofile-arcs -ftest-coverage) endif()

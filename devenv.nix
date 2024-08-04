@@ -59,6 +59,13 @@
     entry = "./scripts/ci/test.sh";
     pass_filenames = false;
   };
+  pre-commit.hooks.code-cov-100 = {
+    enable = true;
+
+    name = "Is our testing code coverage 100%?";
+    entry = "./scripts/ci/code-coverage.sh";
+    pass_filenames = false;
+  };
   pre-commit.hooks.docs-complete = {
     enable = true;
 
