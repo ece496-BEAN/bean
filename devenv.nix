@@ -45,6 +45,13 @@
     entry = "./scripts/ci/format.sh";
     pass_filenames = false;
   };
+  pre-commit.hooks.docs-complete = {
+    enable = true;
+
+    name = "Ensures that all our source code is documented.";
+    entry = "./scripts/ci/doc.sh";
+    pass_filenames = false;
+  };
   
   enterShell = ''
     export TERM=xterm-color
