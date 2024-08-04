@@ -1,4 +1,5 @@
 import argparse
+import multiprocessing
 
 def main():
     parser = argparse.ArgumentParser()
@@ -82,13 +83,13 @@ def main():
                         case _: raise RuntimeError(f"Unexpected opt type: {args.opt}")
                     if args.lint:
                         cmd = f"{cmd} -DUSE_STATIC_ANALYZER='clang-tidy;iwyu;cppcheck'"
-                        cmd = f"{cmd} -DCPPCHECK_ARGS='--std=c++20;--suppress=toomanyconfigs;--suppress=unmatchedSuppression;--suppress=unusedFunction;--suppress=missingIncludeSystem;--suppress=*:*_deps/*;--error-exitcode=1;--enable=all;-j$(nproc)'"
+                        cmd = f"{cmd} -DCPPCHECK_ARGS='--std=c++20;--suppress=toomanyconfigs;--suppress=unmatchedSuppression;--suppress=unusedFunction;--suppress=missingIncludeSystem;--suppress=*:*_deps/*;--error-exitcode=1;--enable=all;-j{multiprocessing.cpu_count()}'"
                         cmd = f"{cmd} -DIWYU_ARGS='-Xiwyu;--error;-Xiwyu;--cxx17ns'"
                     if len(args.san) > 0:
                         mappings = {"addr":"Address", "mem":"Memory", "mem-with-orig":"MemoryWithOrigins","undef":"Undefined","thread":"Thread","leak":"Leak","cfi":"CFI"}
                         expanded = [mappings[san] for san in args.san]
                         cmd = f"{cmd} -DUSE_SANITIZER=\"{';'.join(expanded)}\""
-                    if args.cov:
+                    if args.code_target == "test" and args.cov:
                         cmd = f"{cmd} -DCODE_COVERAGE=ON"
                 case "build":
                     cmd = f"cmake --build {dir}"

@@ -43,7 +43,7 @@ auto main(int argc, char **argv) -> int
 
     if (result["version"].as<bool>())
     {
-      std::cout << "Greeter, version " << GREETER_VERSION << '\n';
+      std::cout << "Greeter, version " << BEANBACKEND_VERSION << '\n';
       return 0;
     }
 

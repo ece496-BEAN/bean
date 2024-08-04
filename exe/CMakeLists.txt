@@ -27,9 +27,9 @@ CPMAddPackage(NAME BeanBackend SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/..)
 
 file(GLOB sources CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp)
 
-include(../cmake/tools.static-analyzers.cmake)
+# include(../cmake/tools.static-analyzers.cmake)
 add_executable(${PROJECT_NAME} ${sources})
-include(../cmake/tools.static-analyzers.disable.cmake)
+# include(../cmake/tools.static-analyzers.disable.cmake)
 
 set_target_properties(
   ${PROJECT_NAME} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF

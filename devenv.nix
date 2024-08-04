@@ -41,22 +41,29 @@
   pre-commit.hooks.fmt-cmake-cpp = {
     enable = true;
 
-    name = "Check formatting of CMake and C++ files";
+    name = "Are CMake and C++ files properly formatted?";
     entry = "./scripts/ci/format.sh";
     pass_filenames = false;
   };
-  pre-commit.hooks.docs-complete = {
+  pre-commit.hooks.static-analyzer = {
     enable = true;
 
-    name = "Ensures that all our source code is documented.";
-    entry = "./scripts/ci/doc.sh";
+    name = "Is there no static analysis problems?";
+    entry = "./scripts/ci/static-analyzer.sh";
     pass_filenames = false;
   };
   pre-commit.hooks.tests-passing = {
     enable = true;
 
-    name = "Ensures that all our unit tests are passing.";
+    name = "Are all our unit tests passing?";
     entry = "./scripts/ci/test.sh";
+    pass_filenames = false;
+  };
+  pre-commit.hooks.docs-complete = {
+    enable = true;
+
+    name = "Is our source code documented?";
+    entry = "./scripts/ci/doc.sh";
     pass_filenames = false;
   };
   
