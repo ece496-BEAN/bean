@@ -2,6 +2,7 @@ import argparse
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--build_dir", default="build", help="build directory")
     subparsers = parser.add_subparsers(title="target", required=True, dest="target")
 
     parser_lsp = subparsers.add_parser('lsp')
@@ -10,7 +11,7 @@ def main():
     parser_doc.add_argument('action', choices=['setup', 'generate', 'where'])
 
     parser_fmt = subparsers.add_parser('fmt')
-    parser_fmt.add_argument('action', choices=['setup', 'view', 'fix'])
+    parser_fmt.add_argument('action', choices=['setup', 'view', 'check', 'fix'])
 
     parser_code = subparsers.add_parser('code')
     parser_code_target = parser_code.add_subparsers(title="code_target", required=True, dest="code_target")
@@ -35,10 +36,10 @@ def main():
 
     match args.target:
         case "lsp":
-            dir = "build/lsp"
+            dir = f"{args.build_dir}/lsp"
             cmd = f"cmake -S all -B {dir}"
         case "doc":
-            dir = "build/doc"
+            dir = f"{args.build_dir}/doc"
             match args.action:
                 case "setup":
                     cmd = f"cmake -S doc -B {dir}"
@@ -48,17 +49,19 @@ def main():
                     cmd = f"echo \"{dir}/doxygen/html/index.html\""
                 case _: raise RuntimeError(f"Unexpected doc action: {args.action}")
         case "fmt":
-            dir = "build/fmt"
+            dir = f"{args.build_dir}/fmt"
             match args.action:
                 case "setup":
                     cmd = f"cmake -S test -B {dir}"
                 case "view":
                     cmd = f"cmake --build {dir} --target format"
+                case "check":
+                    cmd = f"cmake --build {dir} --target check-format"
                 case "fix":
                     cmd = f"cmake --build {dir} --target fix-format"
                 case _: raise RuntimeError(f"Unexpected fmt action: {args.action}")
         case "code":
-            dir = "build/code"
+            dir = f"{args.build_dir}/code"
             target = args.code_target
             match args.code_target:
                 case "exe":
@@ -105,14 +108,7 @@ def main():
             
         case _: raise RuntimeError(f"Unexpected target: {args.target}")
     print(cmd)
-    # print(f"{color.CYAN}executing command:")
-    # print(f"{cmd}{color.END}\n")
-    # import subprocess, os,shlex
-    # args = shlex.split(cmd)
-    # subprocess.run(args)
-    
-
-    
+   
 def add_code_target_args(code_coverage: bool = False):
     parser = argparse.ArgumentParser(add_help=False);
     parser.add_argument('--opt', choices=['rel', 'dbg', 'lto'], default='dbg', help="Compiler optimization level.")
@@ -121,18 +117,6 @@ def add_code_target_args(code_coverage: bool = False):
     if code_coverage:
         parser.add_argument('--cov', action='store_true', help="Enable code coverage")
     return parser
-    
-class color:
-   PURPLE = '\033[1;35;48m'
-   CYAN = '\033[1;36;48m'
-   BOLD = '\033[1;37;48m'
-   BLUE = '\033[1;34;48m'
-   GREEN = '\033[1;32;48m'
-   YELLOW = '\033[1;33;48m'
-   RED = '\033[1;31;48m'
-   BLACK = '\033[1;30;48m'
-   UNDERLINE = '\033[4;37;48m'
-   END = '\033[1;37;0m'
     
 if __name__ == '__main__':
     main()

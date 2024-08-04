@@ -1,5 +1,5 @@
-#include <fmt/format.h>       // for format
 #include <beanbackend/greeter.h>  // for Greeter, LanguageCode
+#include <fmt/format.h>           // for format
 
 #include <string>   // for basic_string, string
 #include <utility>  // for move

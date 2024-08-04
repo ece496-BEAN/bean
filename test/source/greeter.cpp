@@ -1,6 +1,6 @@
-#include <doctest/doctest.h>  // for ResultBuilder, CHECK, TestCase, TEST_CASE
 #include <beanbackend/greeter.h>  // for Greeter, LanguageCode
 #include <beanbackend/version.h>  // for GREETER_VERSION
+#include <doctest/doctest.h>      // for ResultBuilder, CHECK, TestCase, TEST_CASE
 
 #include <string>       // for basic_string, operator==, allocator
 #include <string_view>  // for operator==, string_view

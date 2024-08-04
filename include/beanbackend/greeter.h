@@ -22,14 +22,14 @@ namespace greeter
     std::string name;
 
    public:
-     /**
-      * @brief A method description.this goes on for mul
-      * tiple lines.
-      *
-      * A more detailed description.
-      *
-      * @param name A param description.
-      */
+    /**
+     * @brief A method description.this goes on for mul
+     * tiple lines.
+     *
+     * A more detailed description.
+     *
+     * @param name A param description.
+     */
     explicit Greeter(std::string name);
 
     /**

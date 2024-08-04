@@ -17,6 +17,7 @@
     include-what-you-use # C++ linter
     toybox # Unix command line utilities like which, clear
     doxygen # Source code documentation
+    less # file pager
     # python configured below
   ];
 
@@ -35,6 +36,14 @@
 
   pre-commit.hooks = {
     commitizen.enable = true;
+  };
+
+  pre-commit.hooks.fmt-cmake-cpp = {
+    enable = true;
+
+    name = "Check formatting of CMake and C++ files";
+    entry = "./scripts/ci/format.sh";
+    pass_filenames = false;
   };
   
   enterShell = ''

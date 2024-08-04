@@ -32,8 +32,8 @@ add_executable(${PROJECT_NAME} ${sources})
 include(../cmake/tools.static-analyzers.disable.cmake)
 
 set_target_properties(
-  ${PROJECT_NAME} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF OUTPUT_NAME
-                                                                                         "BeanServer"
+  ${PROJECT_NAME} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF
+                             OUTPUT_NAME "BeanServer"
 )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")

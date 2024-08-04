@@ -1,4 +1,4 @@
-build*
+*build*
 # Devenv
 .devenv*
 devenv.local.nix
