@@ -1,10 +1,10 @@
-#include <beanbackend/greeter.h>  // for Greeter, LanguageCode
-#include <fmt/format.h>           // for format
+#include <beanbackend/greeter.h>
+#include <fmt/core.h>  // for format, format_string
 
 #include <string>   // for basic_string, string
 #include <utility>  // for move
 
-#include "fmt/base.h"  // for format_string
+// #include "fmt/base.h"  // for format_string
 
 using namespace greeter;
 

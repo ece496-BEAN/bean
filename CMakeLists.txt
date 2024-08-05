@@ -27,10 +27,11 @@ include(cmake/CPM.cmake)
 CPMAddPackage("gh:TheLartians/PackageProject.cmake@1.8.0")
 
 CPMAddPackage(
-  NAME fmt
-  GIT_TAG 11.0.2
-  GITHUB_REPOSITORY fmtlib/fmt
-  OPTIONS "FMT_INSTALL YES" # create an installable target
+  NAME userver
+  GIT_TAG v2.2
+  GITHUB_REPOSITORY userver-framework/userver
+  OPTIONS # "USERVER_DOWNLOAD_PACKAGES OFF" "USERVER_FEATURE_UTEST OFF" "USERVER_INSTALL ON"
+          "USERVER_FEATURE_STACKTRACE OFF"
 )
 
 # ---- Add source files ----
@@ -45,15 +46,16 @@ file(GLOB_RECURSE sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/
 # Note: for header-only libraries change all PUBLIC flags to INTERFACE and create an interface
 # target: add_library(${PROJECT_NAME} INTERFACE)
 include(cmake/tools.static-analyzers.cmake)
-add_library(${PROJECT_NAME} ${headers} ${sources})
-include(cmake/tools.static-analyzers.disable.cmake)
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 20)
 
-# being a cross-platform target, we enforce standards conformance on MSVC
-target_compile_options(${PROJECT_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
+add_library(${PROJECT_NAME} ${headers} ${sources})
+
+include(cmake/tools.static-analyzers.disable.cmake)
+set_target_properties(
+  ${PROJECT_NAME} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF
+)
 
 # Link dependencies
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt)
+target_link_libraries(${PROJECT_NAME} PRIVATE userver::core)
 
 target_include_directories(
   ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
@@ -67,14 +69,7 @@ target_include_directories(
 # header paths
 string(TOLOWER ${PROJECT_NAME}/version.h VERSION_HEADER_LOCATION)
 
-packageProject(
-  NAME ${PROJECT_NAME}
-  VERSION ${PROJECT_VERSION}
-  NAMESPACE ${PROJECT_NAME}
-  BINARY_DIR ${PROJECT_BINARY_DIR}
-  INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include
-  INCLUDE_DESTINATION include/${PROJECT_NAME}-${PROJECT_VERSION}
-  VERSION_HEADER "${VERSION_HEADER_LOCATION}"
-  COMPATIBILITY SameMajorVersion
-  DEPENDENCIES "fmt 9.1.0"
-)
+# packageProject( NAME ${PROJECT_NAME} VERSION ${PROJECT_VERSION} NAMESPACE ${PROJECT_NAME}
+# BINARY_DIR ${PROJECT_BINARY_DIR} INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include INCLUDE_DESTINATION
+# include/${PROJECT_NAME}-${PROJECT_VERSION} VERSION_HEADER "${VERSION_HEADER_LOCATION}"
+# COMPATIBILITY SameMajorVersion )

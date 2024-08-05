@@ -18,6 +18,21 @@
     toybox # Unix command line utilities like which, clear
     doxygen # Source code documentation
     less # file pager
+    protobuf # Data interchange format.
+    boost # Big set of C++ libraries.
+    openssl # Cryptographic library.
+    yaml-cpp # YAML parser and emitter for C++.
+    zstd # Compression algorithm.
+    jemalloc # Malloc implementation.
+    nghttp2 # HTTP C library
+    libev # Event loop/event model.
+    grpc # C based gRPC
+    cryptopp # Cryptographic library.
+    cctz # TRanslating between absolute and civil times
+    gbenchmark # Google Benchmark
+    curl # Transferring files
+    fmt
+    
     # python configured below
   ];
 

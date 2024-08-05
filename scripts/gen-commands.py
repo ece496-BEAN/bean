@@ -109,6 +109,8 @@ def main():
                 
             
         case _: raise RuntimeError(f"Unexpected target: {args.target}")
+
+    cmd = f"CPM_SOURCE_CACHE=.cpm-cache {cmd}"
     print(cmd)
    
 def add_code_target_args(code_coverage: bool = False):

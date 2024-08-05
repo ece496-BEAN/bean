@@ -1,5 +1,5 @@
 #include <beanbackend/greeter.h>  // for LanguageCode, Greeter
-#include <beanbackend/version.h>  // for GREETER_VERSION
+// #include <beanbackend/version.h>  // for GREETER_VERSION
 
 #include <cxxopts.hpp>    // for value, OptionAdder, Options, OptionValue
 #include <iostream>       // for basic_ostream, operator<<, endl, cout
@@ -43,7 +43,8 @@ auto main(int argc, char **argv) -> int
 
     if (result["version"].as<bool>())
     {
-      std::cout << "Greeter, version " << BEANBACKEND_VERSION << '\n';
+      std::cout << "Greeter, version "
+                << "TODO REMOVED" << '\n';
       return 0;
     }
 
