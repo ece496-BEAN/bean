@@ -3,32 +3,33 @@ import multiprocessing
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--build_dir", default="build", help="build directory")
-    subparsers = parser.add_subparsers(title="target", required=True, dest="target")
+    parser.add_argument("--build_dir", default="build", help="Build directory.")
+    subparsers = parser.add_subparsers(title="target", required=True, dest="target", help="What 'target' or aspect of the project you want to execute commands for. "
+                                                                                          "`... <target> --help` for more details.")
 
-    parser_lsp = subparsers.add_parser('lsp')
+    parser_lsp = subparsers.add_parser('lsp', description="Configure the language server. No arguments (just hit enter).")
 
-    parser_doc = subparsers.add_parser('doc')
-    parser_doc.add_argument('action', choices=['setup', 'generate', 'where'])
+    parser_doc = subparsers.add_parser('doc', description="Commands for working with the documentation.")
+    parser_doc.add_argument('action', choices=['setup', 'generate', 'where'], help="First `setup` the documentation build directory (done once). Then `generate` the documentation. Finally view the documentation by finding `where` it is generated.")
 
-    parser_fmt = subparsers.add_parser('fmt')
-    parser_fmt.add_argument('action', choices=['setup', 'view', 'check', 'fix'])
+    parser_fmt = subparsers.add_parser('fmt', description="Commands for formatting the code.")
+    parser_fmt.add_argument('action', choices=['setup', 'view', 'check', 'fix'], help="First `setup` the formatting build directory (done once). Then `view` formatting issues, or `check` if you just want a 0/1 exit code (for CI). Then `fix` to automatically fix the formatting.")
 
-    parser_code = subparsers.add_parser('code')
-    parser_code_target = parser_code.add_subparsers(title="code_target", required=True, dest="code_target")
-    parser_code_target_exe = parser_code_target.add_parser('exe')
-    parser_code_target_exe_action = parser_code_target_exe.add_subparsers(title="action", required=True, dest="code_action")
-    parser_code_target_exe_action.add_parser('setup', parents = [add_code_target_args()])
-    parser_code_target_exe_action.add_parser('build')
-    parser_code_target_exe_action.add_parser('run')
+    parser_code = subparsers.add_parser('code', description="Commands for working with the actual C++ code (building, testing, running)")
+    parser_code_target = parser_code.add_subparsers(title="code_target", required=True, dest="code_target", help="What code target (e.g., exe, test) you want to execute commands for. `... code <code_target> --help` for more details.")
+    parser_code_target_exe = parser_code_target.add_parser('exe', description="Commands to work with the executable (BeanServer). `... code exe <action> --help` for more details.")
+    parser_code_target_exe_action = parser_code_target_exe.add_subparsers(title="action", required=True, dest="code_action", help="First `setup` the exe build directory (done once). Then `build` the exe. Finally `run` it and have fun!")
+    parser_code_target_exe_action.add_parser('setup', parents = [add_code_target_args()], description="Flags to configure the executable build.")
+    parser_code_target_exe_action.add_parser('build', description="Build the executable.")
+    parser_code_target_exe_action.add_parser('run', description="Run the executable.")
     
-    parser_code_target_test = parser_code_target.add_parser('test')
-    parser_code_target_test_action = parser_code_target_test.add_subparsers(title="action", required=True, dest="code_action")
+    parser_code_target_test = parser_code_target.add_parser('test', description="Commands to work with the unit tests (BeanBackendTests). `... code test <action> --help` for more details.")
+    parser_code_target_test_action = parser_code_target_test.add_subparsers(title="action", required=True, dest="code_action", help="First `setup` the test build directory (done once). Then `build` the tests. Then `run` the tests and see how many pass. For code coverage, `cov-gen` can be done after `setup --cov` (the `--cov` is required!) to analyze the code coverage, and `cov-view` will show you where to view the coverage report.")
     parser_code_target_test_action.add_parser('setup', parents = [add_code_target_args(code_coverage=True)])
-    parser_code_target_test_action.add_parser('build')
-    parser_code_target_test_action.add_parser('run')
-    parser_code_target_test_action.add_parser('cov-gen')
-    parser_code_target_test_action.add_parser('cov-view')
+    parser_code_target_test_action.add_parser('build', description="Build the tests.")
+    parser_code_target_test_action.add_parser('run', description="Run the tests.")
+    parser_code_target_test_action.add_parser('cov-gen', description="Generate the code coverage reports (this will automatically run the tests first).")
+    parser_code_target_test_action.add_parser('cov-view', description="Show where the coverage reports were generated.")
         
 
     args = parser.parse_args()
@@ -116,7 +117,7 @@ def add_code_target_args(code_coverage: bool = False):
     parser.add_argument('--lint', action='store_true', help="Enable linting (note: the build errors when linting fails.)")
     parser.add_argument('--san', choices=['addr', 'mem', 'mem-with-orig', 'undef', 'thread', 'leak', 'cfi'], action='extend', default=[], nargs='+', help="Sanitizers to build with. You may specify multiple, though some do not work properly together.")
     if code_coverage:
-        parser.add_argument('--cov', action='store_true', help="Enable code coverage")
+        parser.add_argument('--cov', action='store_true', help="Enable code coverage. IMPORTANT: This MUST be present for code coverage analysis to happen!")
     return parser
     
 if __name__ == '__main__':
