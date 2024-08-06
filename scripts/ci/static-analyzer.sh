@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-./scripts/gen-commands.sh --build_dir .build-ci code exe setup --lint
-./scripts/gen-commands.sh --build_dir .build-ci code exe build
+$DEVENV_ROOT/scripts/gen-commands.sh --build_dir $DEVENV_ROOT/.build-ci code exe setup --lint
+$DEVENV_ROOT/scripts/gen-commands.sh --build_dir $DEVENV_ROOT/.build-ci code exe build

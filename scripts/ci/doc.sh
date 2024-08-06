@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-./scripts/gen-commands.sh --build_dir .build-ci doc setup
-./scripts/gen-commands.sh --build_dir .build-ci doc generate
+$DEVENV_ROOT/scripts/gen-commands.sh --build_dir $DEVENV_ROOT/.build-ci doc setup
+$DEVENV_ROOT/scripts/gen-commands.sh --build_dir $DEVENV_ROOT/.build-ci doc generate

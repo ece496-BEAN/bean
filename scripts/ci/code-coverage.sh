@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-./scripts/gen-commands.sh --build_dir .build-ci/cov code test setup --cov
+$DEVENV_ROOT/scripts/gen-commands.sh --build_dir $DEVENV_ROOT/.build-ci/cov code test setup --cov
 # Hardcoded, can change if needed
-cmake --build .build-ci/cov/code/test  --target ccov-export-BeanBackendTests
+cmake --build $DEVENV_ROOT/.build-ci/cov/code/test  --target ccov-export-BeanBackendTests
 
-pass_rate=$(cat .build-ci/cov/code/test/ccov/BeanBackendTests.json | \
+pass_rate=$(cat $DEVENV_ROOT/.build-ci/cov/code/test/ccov/BeanBackendTests.json | \
     python3 -c "import sys, json; print(json.load(sys.stdin)['data'][0]['totals']['functions']['percent'])")
 
 if [ "$pass_rate" -ne "100" ]; then

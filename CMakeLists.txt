@@ -55,7 +55,7 @@ set_target_properties(
 )
 
 # Link dependencies
-target_link_libraries(${PROJECT_NAME} PRIVATE userver::core)
+target_link_libraries(${PROJECT_NAME} PUBLIC userver::core)
 
 target_include_directories(
   ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>

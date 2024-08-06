@@ -1,5 +1,6 @@
 import argparse
 import multiprocessing
+import os
 
 def main():
     parser = argparse.ArgumentParser()
@@ -34,17 +35,20 @@ def main():
 
     args = parser.parse_args()
 
+    root = os.environ["DEVENV_ROOT"]
+    args.build_dir = f"{root}/{args.build_dir}"
+
     cmd: str = ""
 
     match args.target:
         case "lsp":
             dir = f"{args.build_dir}/lsp"
-            cmd = f"cmake -S all -B {dir}"
+            cmd = f"cmake -S {root}/all -B {dir}"
         case "doc":
             dir = f"{args.build_dir}/doc"
             match args.action:
                 case "setup":
-                    cmd = f"cmake -S doc -B {dir}"
+                    cmd = f"cmake -S {root}/doc -B {dir}"
                 case "generate":
                     cmd = f"cmake --build {dir} --target GenerateDocs"
                 case "where":
@@ -54,7 +58,7 @@ def main():
             dir = f"{args.build_dir}/fmt"
             match args.action:
                 case "setup":
-                    cmd = f"cmake -S test -B {dir}"
+                    cmd = f"cmake -S {root}/test -B {dir}"
                 case "view":
                     cmd = f"cmake --build {dir} --target format"
                 case "check":
@@ -73,7 +77,7 @@ def main():
                 case _: raise RuntimeError(f"Unexpected code target: {args.code_target}")
             match args.code_action:
                 case "setup":
-                    cmd = f"cmake -G Ninja -S {target} -B {dir} -DUSE_CCACHE=ON"
+                    cmd = f"cmake -G Ninja -S {root}/{target} -B {dir} -DUSE_CCACHE=ON"
                     match args.opt:
                         case 'rel':
                             cmd = f"{cmd} -DCMAKE_BUILD_TYPE=Release"
@@ -84,7 +88,7 @@ def main():
                         case _: raise RuntimeError(f"Unexpected opt type: {args.opt}")
                     if args.lint:
                         cmd = f"{cmd} -DUSE_STATIC_ANALYZER='clang-tidy;iwyu;cppcheck'"
-                        cmd = f"{cmd} -DCPPCHECK_ARGS='--std=c++20;--suppress=toomanyconfigs;--suppress=unmatchedSuppression;--suppress=unusedFunction;--suppress=missingIncludeSystem;--suppress=*:*_deps/*;--error-exitcode=1;--enable=all;-j{multiprocessing.cpu_count()}'"
+                        cmd = f"{cmd} -DCPPCHECK_ARGS='--std=c++20;--cppcheck-build-dir={root}/.cache/cppcheck;--suppress=toomanyconfigs;--suppress=unmatchedSuppression;--suppress=unusedFunction;--suppress=missingIncludeSystem;--suppress=*:*_deps/*;--suppress=*:*.cpm-cache/*;--error-exitcode=1;--enable=all;-j{multiprocessing.cpu_count()}'"
                         cmd = f"{cmd} -DIWYU_ARGS='-Xiwyu;--error;-Xiwyu;--cxx17ns'"
                     if len(args.san) > 0:
                         mappings = {"addr":"Address", "mem":"Memory", "mem-with-orig":"MemoryWithOrigins","undef":"Undefined","thread":"Thread","leak":"Leak","cfi":"CFI"}
@@ -97,7 +101,7 @@ def main():
                 case "run":
                     match target:
                         case "exe":
-                            cmd = f"./{dir}/BeanServer"
+                            cmd = f"{dir}/BeanServer -c {root}/config/static_config.yaml"
                         case "test": 
                             cmd = f"CTEST_OUTPUT_ON_FAILURE=1 cmake --build {dir} --target {target}"
                         case _: raise RuntimeError(f"Unexpected code target: {args.code_target}")

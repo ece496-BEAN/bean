@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-eval $(python scripts/gen-commands.py "$@")
+eval $(python "$DEVENV_ROOT/scripts/gen-commands.py" "$@")

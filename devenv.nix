@@ -93,6 +93,7 @@
     export TERM=xterm-color
     export CC=clang
     export CXX=clang++
+    mkdir -p .cache/cppcheck
   '';
 
   # https://devenv.sh/pre-commit-hooks/

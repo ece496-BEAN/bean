@@ -4,8 +4,6 @@
 #include <string>   // for basic_string, string
 #include <utility>  // for move
 
-// #include "fmt/base.h"  // for format_string
-
 using namespace greeter;
 
 Greeter::Greeter(std::string _name) : name(std::move(_name))
