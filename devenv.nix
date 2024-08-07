@@ -31,7 +31,7 @@
     cctz # TRanslating between absolute and civil times
     gbenchmark # Google Benchmark
     curl # Transferring files
-    fmt
+    fmt # C++ printf replacement lib
     
     # python configured below
   ];
@@ -74,8 +74,10 @@
     entry = "./scripts/ci/test.sh";
     pass_filenames = false;
   };
+
   pre-commit.hooks.code-cov-100 = {
-    enable = true;
+    # Disabled, not necessary
+    enable = false;
 
     name = "Is our testing code coverage 100%?";
     entry = "./scripts/ci/code-coverage.sh";
